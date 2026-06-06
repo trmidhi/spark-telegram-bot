@@ -112,7 +112,14 @@ export function parseNaturalRouteExecutionLedger(jsonl: string): NaturalRouteExe
     .split(/\r?\n/)
     .map((line) => line.trim())
     .filter(Boolean)
-    .map((line) => JSON.parse(line) as NaturalRouteExecutionRecord);
+    .map((line) => {
+      try {
+        return JSON.parse(line) as NaturalRouteExecutionRecord;
+      } catch {
+        return null;
+      }
+    })
+    .filter((r): r is NaturalRouteExecutionRecord => r !== null);
 }
 
 export async function readNaturalRouteExecutionLedger(filePath = naturalRouteLedgerPath()): Promise<NaturalRouteExecutionRecord[]> {

@@ -176,7 +176,13 @@ export function parseConversationSmokeScenarios(value: unknown): ConversationSmo
 }
 
 export function readConversationSmokeScenarios(filePath: string): ConversationSmokeScenario[] {
-  return parseConversationSmokeScenarios(JSON.parse(fs.readFileSync(filePath, 'utf8')));
+  let data: unknown;
+  try {
+    data = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return [];
+  }
+  return parseConversationSmokeScenarios(data);
 }
 
 export function runConversationSmokeScenarios(scenarios: ConversationSmokeScenario[]): ConversationSmokeSummary {
